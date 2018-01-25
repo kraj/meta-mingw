@@ -1,3 +1,10 @@
+INSANE_SKIP_${PN}_append_mingw32 = " staticdev"
+EXTRA_OECONF_append_mingw32 = " --disable-nls --disable-lto"
+LDFLAGS_append_mingw32 = " -Wl,-static"
+EXEEXT_mingw32 = ".exe"
+ELFUTILS_mingw32 = ""
+DEPENDS_remove_mingw32 = "gettext"
+
 INSANE_SKIP_${PN}_append_sdkmingw32 = " staticdev"
 EXTRA_OECONF_append_sdkmingw32 = " --disable-nls --disable-lto"
 LDFLAGS_append_sdkmingw32 = " -Wl,-static"
