@@ -13,7 +13,7 @@ SRC_URI[sha256sum] = "2a601db99ef579b9be69c775218ad956a24a09d7dabc9ff6c5bd60da9c
 S = "${WORKDIR}/mingw-w64-v${PV}/mingw-w64-headers"
 B = "${WORKDIR}/build-${TARGET_SYS}"
 
-inherit autotools nativesdk
+inherit autotools
 
 INHIBIT_DEFAULT_DEPS = "1"
 DEPENDS = ""
@@ -31,3 +31,5 @@ do_compile() {
 }
 
 FILES_${PN} += "${exec_prefix}/${TARGET_SYS}"
+
+BBCLASSEXTEND = "nativesdk"
