@@ -91,3 +91,5 @@ do_install_mingw32() {
         fi
         oe_multilib_header curses.h
 }
+
+FILES_${PN} += "${bindir} ${libdir}"
