@@ -43,3 +43,5 @@ do_configure() {
 FILES_${PN} += "${exec_prefix}/libsrc"
 
 BBCLASSEXTEND = "nativesdk"
+
+SECURITY_CFLAGS_remove_mingw32 = "-fstack-protector-strong"

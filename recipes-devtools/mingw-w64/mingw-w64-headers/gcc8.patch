@@ -1,0 +1,30 @@
+>From revision 248028 in GCC 8 there is defined function _xgetbv:
+https://gcc.gnu.org/viewcvs/gcc/trunk/gcc/config/i386/xsaveintrin.h?r1=248028&r2=248027&pathrev=248028
+
+It conflicting with mingw-w64 definition from mingw-w64-headers/include/psdk_inc/intrin-impl.h
+
+workaround for mingw-w64:
+
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+Upstream-Status: Pending [https://sourceforge.net/p/mingw-w64/mailman/message/35866694/]
+
+Index: mingw-w64-headers/include/psdk_inc/intrin-impl.h
+===================================================================
+--- mingw-w64-headers.orig/include/psdk_inc/intrin-impl.h
++++ mingw-w64-headers/include/psdk_inc/intrin-impl.h
+@@ -1406,6 +1406,7 @@ __buildmov(__movsd, unsigned __LONG32, "
+ #endif /* __INTRINSIC_PROLOG */
+ 
+ /* NOTE: This should be in immintrin.h */
++#if __GNUC__ < 8 /* GCC 8 already has _xgetbv defined */
+ #if __INTRINSIC_PROLOG(_xgetbv)
+ unsigned __int64 _xgetbv(unsigned int);
+ __INTRINSICS_USEINLINE
+@@ -1426,6 +1427,7 @@ unsigned __int64 _xgetbv(unsigned int in
+ }
+ #define __INTRINSIC_DEFINED__xgetbv
+ #endif /* __INTRINSIC_PROLOG */
++#endif /* __GNUC__ < 8 */
+ 
+ #endif /* defined(__x86_64__) || defined(_AMD64_) || defined(__i386__) || defined(_X86_) */
+ 
