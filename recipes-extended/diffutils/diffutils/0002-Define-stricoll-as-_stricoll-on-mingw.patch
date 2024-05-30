@@ -1,0 +1,37 @@
+From 9e1318440a5f7f4a00f077fc3cbd1edc07e0985d Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Wed, 29 May 2024 21:20:12 -0700
+Subject: [PATCH 2/2] Define stricoll as _stricoll on mingw
+
+* src/system.h: Define stricoll as _stricoll on mingw.
+
+Upstream-Status: Submitted [https://lists.gnu.org/archive/html/bug-diffutils/2024-05/msg00004.html]
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ src/system.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/src/system.h b/src/system.h
+index b37893f..4c7a318 100644
+--- a/src/system.h
++++ b/src/system.h
+@@ -63,6 +63,16 @@
+ #include <inttypes.h>
+ 
+ #include <string.h>
++/* stricoll is not provided by any headers on windows/mingw
++   only _stricoll is provided, the function is however aliased
++   to provide stricoll in runtime libraries, the configure check
++   to detect stricoll defines the prototype in generated test
++   itself and thus test passes, however compiling fails with
++   GCC-14 which enables implicit-function-declaration as error  */ 
++#if defined _WIN32 && ! defined __CYGWIN__
++#define stricoll _stricoll
++#endif
++
+ #if ! HAVE_STRCASECOLL
+ # if HAVE_STRICOLL || defined stricoll
+ #  define strcasecoll(a, b) stricoll (a, b)
+-- 
+2.45.1
+

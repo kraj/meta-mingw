@@ -1,0 +1,37 @@
+From 197c0c72a6cb60a647db02c2874a8103be4557d6 Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Wed, 29 May 2024 10:58:54 -0700
+Subject: [PATCH 1/2] sdiff: Match execvp argument types
+
+Fixes build with GCC-14
+
+../../diffutils-3.10/src/sdiff.c:579:28: error: passing argument 2 of '_execvp' from incompatible pointer type [-Wincompatible-pointer-types]
+  579 |       execvp (diffargv[0], (char **) diffargv);
+      |                            ^~~~~~~~~~~~~~~~~~
+      |                            |
+      |                            char **
+
+* src/sdiff.c (main): execpv expects const pointer.
+
+Upstream-Status: Submitted [https://lists.gnu.org/archive/html/bug-diffutils/2024-05/msg00003.html]
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ src/sdiff.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/sdiff.c b/src/sdiff.c
+index 0b638d4..a4642b1 100644
+--- a/src/sdiff.c
++++ b/src/sdiff.c
+@@ -576,7 +576,7 @@ main (int argc, char *argv[])
+       diffarg (argv[optind]);
+       diffarg (argv[optind + 1]);
+       diffarg (0);
+-      execvp (diffargv[0], (char **) diffargv);
++      execvp (diffargv[0], diffargv);
+       perror_fatal (diffargv[0]);
+     }
+   else
+-- 
+2.45.1
+
